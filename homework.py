@@ -19,10 +19,11 @@ class InfoMessage:
     def get_message(self) -> str:
         try:
             return self.message.format(**asdict(self))
-        except (KeyError, IndexError):
+        except (KeyError, IndexError) as e:
             raise NotImplementedError(
-                'Ошибка при обращении к словарю данных с датчиков'
+                'Ошибка IndexError или KeyError при разборе message в классе InfoMessage'
             )
+            
 
 
 class Training:
@@ -145,7 +146,8 @@ def read_package(workout_type: str, data: List[int]) -> Training:
         return type_of_training[workout_type](*data)
     except (KeyError, IndexError):
         raise NotImplementedError(
-            'Попытка обращения к несуществующему типу тренировки')
+            'Попытка обращения к несуществующему типу тренировки '
+            'или данным с датчиков.')
 
 
 def main(training: Training) -> None:
