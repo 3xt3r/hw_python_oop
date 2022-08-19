@@ -19,15 +19,17 @@ class InfoMessage:
     def get_message(self) -> str:
         try:
             return self.message.format(**asdict(self))
-        except (KeyError, IndexError) as e:
-            print(e)
+        except (KeyError, IndexError):
+            raise NotImplementedError(
+                'Ошибка при обращении к словарю данных с датчиков'
+            )
 
 
 class Training:
     """Базовый класс тренировки."""
-    M_IN_KM = 1000
-    LEN_STEP = 0.65
-    MIN_IN_HOUR = 60
+    M_IN_KM: int = 1000
+    LEN_STEP: float = 0.65
+    MIN_IN_HOUR: int = 60
 
     def __init__(self,
                  action: int,
@@ -69,15 +71,8 @@ class Running(Training):
     Расчет в get_spent_calories() в следующих единицах:
     длительность тренировки (duration): минуты
     cредняя скорость (mean_speed): км/ч"""
-    COEFF_1 = 18
-    COEFF_2 = 20
-
-    def __init__(self,
-                 action: int,
-                 duration: float,
-                 weight: float,
-                 ) -> None:
-        super().__init__(action, duration, weight)
+    COEFF_1: int = 18
+    COEFF_2: int = 20
 
     def get_spent_calories(self):
         mean_speed = self.get_mean_speed()
@@ -90,9 +85,9 @@ class SportsWalking(Training):
     Расчет в get_spent_calories() в следующих единицах:
     длительность тренировки (duration): минуты
     cредняя скорость (mean_speed): км/ч"""
-    COEFF_1 = 0.035
-    COEFF_2 = 0.029
-    COEFF_3 = 2
+    COEFF_1: float = 0.035
+    COEFF_2: float = 0.029
+    COEFF_3: int = 2
 
     def __init__(self,
                  action,
@@ -115,9 +110,9 @@ class Swimming(Training):
     длительность тренировки (duration): часы
     cредняя скорость (mean_speed): км/ч
     длина бассейна (length_pool): метры """
-    LEN_STEP = 1.38
-    COEFF_1 = 1.1
-    COEFF_2 = 2
+    LEN_STEP: float = 1.38
+    COEFF_1: float = 1.1
+    COEFF_2: int = 2
 
     def __init__(self,
                  action,
@@ -148,8 +143,9 @@ def read_package(workout_type: str, data: List[int]) -> Training:
     }
     try:
         return type_of_training[workout_type](*data)
-    except (KeyError, IndexError) as e:
-        print(e)
+    except (KeyError, IndexError):
+        raise NotImplementedError(
+            'Попытка обращения к несуществующему типу тренировки')
 
 
 def main(training: Training) -> None:
