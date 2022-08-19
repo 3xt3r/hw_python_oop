@@ -19,11 +19,11 @@ class InfoMessage:
     def get_message(self) -> str:
         try:
             return self.message.format(**asdict(self))
-        except (KeyError, IndexError) as e:
+        except (KeyError, IndexError):
             raise NotImplementedError(
-                'Ошибка IndexError или KeyError при разборе message в классе InfoMessage'
+                'Ошибка IndexError или KeyError при разборе message '
+                'в классе InfoMessage'
             )
-            
 
 
 class Training:
